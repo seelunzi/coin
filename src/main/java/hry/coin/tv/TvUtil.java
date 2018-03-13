@@ -14,34 +14,24 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/*     */ public class TvUtil {
+public class TvUtil {
     private static TvClientFactory btsClientFactory = null;
     private static String serverAddr = (String) Properties.appcoinMap().get("tv_ip");
-    /*  29 */   private static int port = Integer.valueOf((String) Properties.appcoinMap().get("tv_port")).intValue();
-    /*  30 */   private static String rpcUsername = (String) Properties.appcoinMap().get("tv_rpcuser");
-    /*  31 */   private static String rpcPassword = (String) Properties.appcoinMap().get("tv_rpcpassword");
-    /*  32 */   private static String walleName = (String) Properties.appcoinMap().get("tv_walletName");
-    /*  33 */   private static String wallePassword = (String) Properties.appcoinMap().get("tv_walletPassword");
-    /*  34 */   public static String withdAccount = (String) Properties.appcoinMap().get("tv_withdAccount");
-    /*  35 */   public static String coldAddress_memo = (String) Properties.appcoinMap().get("tv_coldAddress_memo");
-    /*     */
-    /*  37 */   public static BigDecimal Fee = new BigDecimal("0.01");
-    /*  38 */   private static int openTime = 10;
+    private static int port = Integer.valueOf((String) Properties.appcoinMap().get("tv_port")).intValue();
+    private static String rpcUsername = (String) Properties.appcoinMap().get("tv_rpcuser");
+    private static String rpcPassword = (String) Properties.appcoinMap().get("tv_rpcpassword");
+    private static String walleName = (String) Properties.appcoinMap().get("tv_walletName");
+    private static String wallePassword = (String) Properties.appcoinMap().get("tv_walletPassword");
+    public static String withdAccount = (String) Properties.appcoinMap().get("tv_withdAccount");
+    public static String coldAddress_memo = (String) Properties.appcoinMap().get("tv_coldAddress_memo");
+    public static BigDecimal Fee = new BigDecimal("0.01");
+    private static int openTime = 10;
 
-    /*     */
-    /*     */
     public static String clientWallet(String method, List<Object> params) {
-        /*  41 */
-        return btsClientFactory.send(method, params, serverAddr, port, rpcUsername, rpcPassword);
-        /*     */
-    }
 
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
+        return btsClientFactory.send(method, params, serverAddr, port, rpcUsername, rpcPassword);
+
+    }
     public static boolean openAndUnlockWalle()
     /*     */ {
         /*  50 */

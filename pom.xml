@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>hurong_coin</groupId>
+    <artifactId>hurong_coin</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name>hurong_coin</name>
+
+    <properties>
+        <!-- 指定项目是JDK1.7版本 -->
+        <java-version>1.8</java-version>
+        <!--指定Maven用什么编码来读取源码及文档 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--指定Maven用什么编码来呈现 -->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- dependency标记的scope属性解释： -->
+        <!-- compile，缺省值，适用于所有阶段，会随着项目一起发布。 -->
+        <!-- provided，类似compile，期望JDK、容器或使用者会提供这个依赖。如servlet.jar。 -->
+        <!-- runtime，只在运行时使用，如JDBC驱动，适用运行和测试阶段。 -->
+        <!-- test，只在测试时使用，用于编译和运行测试代码。不会随项目发布。 -->
+        <!-- system，类似provided，需要显式提供包含依赖的jar，Maven不会在Repository中查找它。 -->
+
+        <!-- eth api接口 -->
+        <!--<dependency>-->
+        <!--<groupId>hurong_coin</groupId>-->
+        <!--<artifactId>hurong_coin_api</artifactId>-->
+        <!--<version>0.0.1-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!---->
+
+        <!-- junit测试 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- web项目需要的jar -->
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2.1-b03</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>taglibs</groupId>
+            <artifactId>standard</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+
+        <!-- ***************************内部依赖***************************** -->
+
+        <dependency>
+            <groupId>com.github.briandilley.jsonrpc4j</groupId>
+            <artifactId>jsonrpc4j</artifactId>
+            <version>1.4.6</version>
+        </dependency>
+
+
+        <!--<dependency>-->
+        <!--<groupId>hurong_core</groupId>-->
+        <!--<artifactId>hurong_core</artifactId>-->
+        <!--<version>0.0.1-SNAPSHOT</version>-->
+        <!--</dependency>-->
+
+        <!---->
+        <!--<dependency>-->
+        <!--<groupId>hurong_redis</groupId>-->
+        <!--<artifactId>hurong_redis</artifactId>-->
+        <!--<version>0.0.1-SNAPSHOT</version>-->
+        <!--</dependency>-->
+        <!---->
+        <!---->
+        <!-- ***************************以太坊添加***************************** -->
+        <!-- https://mvnrepository.com/artifact/org.web3j/core -->
+        <dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>core</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/org.web3j/geth -->
+        <dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>geth</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.0.pr4</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.reactivex.rxjava2/rxjava -->
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.57</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.squareup/javapoet -->
+        <dependency>
+            <groupId>com.squareup</groupId>
+            <artifactId>javapoet</artifactId>
+            <version>1.9.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.jnr/jnr-unixsocket -->
+        <dependency>
+            <groupId>com.github.jnr</groupId>
+            <artifactId>jnr-unixsocket</artifactId>
+            <version>0.18</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.module/jackson-module-jaxb-annotations -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>2.9.0.pr4</version>
+        </dependency>
+
+        <!-- ***************************内部依赖***************************** -->
+
+        <dependency>
+            <groupId>hurong_bitcoin</groupId>
+            <artifactId>hurong_bitcoin</artifactId>
+            <version>0.0.1-20180207.085919-880</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.3.14.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.nutz/nutz -->
+        <dependency>
+            <groupId>org.nutz</groupId>
+            <artifactId>nutz</artifactId>
+            <version>1.r.65</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>4.3.14.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.3.14.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azazar</groupId>
+            <artifactId>bitcoin-json-rpc-client</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.46</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+    </dependencies>
+
+
+    <profiles>
+        <!-- 默认 -->
+        <profile>
+            <id>main</id>
+            <properties>
+                <profile.active>main</profile.active>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+
+        <!-- 可酷 -->
+        <profile>
+            <id>keku</id>
+            <properties>
+                <profile.active>keku</profile.active>
+            </properties>
+        </profile>
+
+        <!-- 7b -->
+        <profile>
+            <id>qb</id>
+            <properties>
+                <profile.active>qb</profile.active>
+            </properties>
+        </profile>
+
+        <!-- yb -->
+        <profile>
+            <id>yb</id>
+            <properties>
+                <profile.active>yb</profile.active>
+            </properties>
+        </profile>
+
+        <!-- jb -->
+        <profile>
+            <id>jb</id>
+            <properties>
+                <profile.active>jb</profile.active>
+            </properties>
+        </profile>
+
+        <!-- 上海荣顺 -->
+        <profile>
+            <id>shrs</id>
+            <properties>
+                <profile.active>shrs</profile.active>
+            </properties>
+        </profile>
+
+        <!-- 重庆币商网 -->
+        <profile>
+            <id>cqbsw</id>
+            <properties>
+                <profile.active>cqbsw</profile.active>
+            </properties>
+        </profile>
+
+
+        <!-- 上海币莱网 -->
+        <profile>
+            <id>shblw</id>
+            <properties>
+                <profile.active>shblw</profile.active>
+            </properties>
+        </profile>
+
+        <!-- 上海善林 -->
+        <profile>
+            <id>shsl</id>
+            <properties>
+                <profile.active>shsl</profile.active>
+            </properties>
+        </profile>
+
+        <!-- 香港未来 -->
+        <profile>
+            <id>xgwl</id>
+            <properties>
+                <profile.active>xgwl</profile.active>
+            </properties>
+        </profile>
+
+        <!--江枫币 -->
+        <profile>
+            <id>jfb</id>
+            <properties>
+                <profile.active>jfb</profile.active>
+            </properties>
+        </profile>
+
+        <!--北京渝新 -->
+        <profile>
+            <id>bjyx</id>
+            <properties>
+                <profile.active>bjyx</profile.active>
+            </properties>
+        </profile>
+
+        <!--香港汇信链njlbw -->
+        <profile>
+            <id>xghxl</id>
+            <properties>
+                <profile.active>xghxl</profile.active>
+            </properties>
+        </profile>
+
+        <!--南京乐币网njlbw -->
+        <profile>
+            <id>njlbw</id>
+            <properties>
+                <profile.active>njlbw</profile.active>
+            </properties>
+        </profile>
+
+        <!--南京万安njlbw -->
+        <profile>
+            <id>njwa</id>
+            <properties>
+                <profile.active>njwa</profile.active>
+            </properties>
+        </profile>
+
+        <!--香港币升 -->
+        <profile>
+            <id>xgbs</id>
+            <properties>
+                <profile.active>xgbs</profile.active>
+            </properties>
+        </profile>
+
+        <!--河南 -->
+        <profile>
+            <id>henzx</id>
+            <properties>
+                <profile.active>henzx</profile.active>
+            </properties>
+        </profile>
+        <!--前海仁信 -->
+        <profile>
+            <id>szqh</id>
+            <properties>
+                <profile.active>szqh</profile.active>
+            </properties>
+        </profile>
+
+        <!--山西乐米 -->
+        <profile>
+            <id>sxlm</id>
+            <properties>
+                <profile.active>sxlm</profile.active>
+            </properties>
+        </profile>
+
+    </profiles>
+
+    <build>
+        <!-- 最终打包的名称 -->
+        <finalName>coin</finalName>
+        <resources>
+            <resource>
+                <directory>src/${profile.active}/resources</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.tld</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.tld</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- 编译的时候使用JDK7和UTF8编码 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <!--<plugin>-->
+            <!--<artifactId>maven-war-plugin</artifactId>-->
+            <!--<configuration>-->
+            <!--<version>3.0</version>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.19.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://localhost:8080/manager/text</url>
+                    <server>tomcat</server>
+                </configuration>
+            </plugin>
+            <!--<plugin>-->
+            <!--&lt;!&ndash;<groupId>org.web3j</groupId>&ndash;&gt;-->
+            <!--&lt;!&ndash;<artifactId>web3j-maven-plugin</artifactId>&ndash;&gt;-->
+            <!--&lt;!&ndash;<version>0.1.3</version>&ndash;&gt;-->
+            <!--<configuration>-->
+            <!--<packageName>model</packageName>-->
+            <!--<contract>-->
+            <!--<includes>-->
+            <!--<include>greeter</include>-->
+            <!--</includes>-->
+            <!--</contract>-->
+            <!--<sourceDestination>src/test/generated</sourceDestination>-->
+            <!--<soliditySourceFiles>-->
+            <!--<directory>src/main/resources</directory>-->
+            <!--<includes>-->
+            <!--<include>big.sol</include>-->
+            <!--</includes>-->
+            <!--</soliditySourceFiles>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+            <!--<plugin>-->
+            <!--<groupId>hurong_code_plugin</groupId>-->
+            <!--<artifactId>hr-maven-plugin</artifactId>-->
+            <!--<version>0.0.1-SNAPSHOT</version>-->
+            <!--</plugin>-->
+        </plugins>
+    </build>
+</project>
