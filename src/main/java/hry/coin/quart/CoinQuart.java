@@ -29,7 +29,6 @@ import org.nutz.json.Json;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CoinQuart {
@@ -98,7 +97,7 @@ public class CoinQuart {
                                 LogFactory.info("获取tv充币记录:" + JSON.toJSON(tv));
                                 transactiontvservice.save(tv);
                                 Transaction transaction = new Transaction();
-                                String time = new Date().getTime() + "";
+                                String time = System.currentTimeMillis() + "";
                                 time = time.substring(0, time.length() - 3);
                                 String address = TvUtil.getAccountPublicAddress(tv.getToAccount());
                                 transaction.setTime(time);

@@ -151,6 +151,7 @@ public class NeoServiceImpl
     /*     */
     /*     */
     /*     */
+    @Override
     public Map getaccountstate(String address)
     /*     */ {
         /* 130 */
@@ -206,6 +207,7 @@ public class NeoServiceImpl
 
     }
 
+    @Override
     public List<NeoEntity> getblock(String index)
         /*     */ {
         /* 166 */

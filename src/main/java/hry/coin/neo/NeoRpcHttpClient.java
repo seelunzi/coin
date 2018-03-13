@@ -28,97 +28,45 @@ public class NeoRpcHttpClient {
     private static volatile JsonRpcHttpClient jsonrpcClient;
 
     public static String getHttpClient(String methodname, List list) {
-
         String url = "";
-
         try {
-
             url = protocol + "://" + ip + ":" + port + "?jsonrpc=2.0&id=1&method=" + methodname + "&params=" + URLEncoder.encode(new StringBuilder().append(list).append("").toString(), "UTF-8");
+        } catch (UnsupportedEncodingException e2) {
 
-        }
-        /*    */ catch (UnsupportedEncodingException e2) {
-            /* 47 */
             e2.printStackTrace();
-            /*    */
         }
-        /* 49 */
         String result = "";
-        /* 50 */
         HttpClient client = new DefaultHttpClient();
-        /*    */
-        try
-            /*    */ {
-            /* 53 */
+        try {
             HttpGet get = new HttpGet(url);
-            /*    */
-            /* 55 */
             get.setHeader("charset", "UTF-8");
-            /* 56 */
             HttpResponse response = client.execute(get);
-            /* 57 */
             if (200 == response.getStatusLine().getStatusCode()) {
-                /* 58 */
                 result = EntityUtils.toString(response.getEntity(), "UTF-8");
-                /*    */
             }
-            /*    */
-            /*    */
-        }
-        /*    */ catch (ClientProtocolException e)
-            /*    */ {
-            /* 64 */
+
+        } catch (ClientProtocolException e) {
             e.printStackTrace();
-            /*    */
-        }
-        /*    */ catch (IOException e) {
-            /* 67 */
+        } catch (IOException e) {
             e.printStackTrace();
-            /*    */
         }
-        /* 69 */
         return result;
-        /*    */
     }
 
-    /*    */
-    /*    */
-    /*    */
-    /*    */
-    /*    */
-    /*    */
-    /*    */
-    public static JsonRpcHttpClient getClient()
-    /*    */ {
-        /* 79 */
+    public static JsonRpcHttpClient getClient() {
         if (jsonrpcClient == null) {
-            /* 80 */
             synchronized (BdsRpcHttpClient.class) {
-                /* 81 */
                 if (jsonrpcClient == null) {
-                    /*    */
                     try {
-                        /* 83 */
                         LogFactory.info("获取bds币的rpc连接成功");
-                        /* 84 */
                         String url = protocol + "://" + ip + ":" + port;
-                        /* 85 */
                         jsonrpcClient = new JsonRpcHttpClient(new URL(url));
-                        /*    */
-                    }
-                    /*    */ catch (MalformedURLException e) {
-                        /* 88 */
+                    } catch (MalformedURLException e) {
                         LogFactory.info("bds钱包接口连接失败");
-                        /*    */
                     }
-                    /*    */
                 }
-                /*    */
             }
-            /*    */
         }
-
         return jsonrpcClient;
-
     }
-
 }
