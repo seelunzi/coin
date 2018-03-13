@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hry.coin.coin.dao.AppCoinTransactionDao">
+
+    <select id="consumeTx" resultType="hry.coin.coin.model.AppCoinTransaction">
+        <![CDATA[
+
+
+
+
+
+
+			select * from app_coin_transaction where  isconsume=0			
+
+
+
+
+
+
+        ]]>
+    </select>
+
+    <select id="existNumber" resultType="java.lang.Integer">
+        <![CDATA[
+
+
+
+
+
+
+			select count(*) from app_coin_transaction  where hash_=#{0} 		
+
+
+
+
+
+
+        ]]>
+    </select>
+
+    <select id="getLastestBlock" resultType="java.math.BigInteger">
+        <![CDATA[
+
+
+
+
+
+
+			select blockNumber from app_coin_transaction  order by blockNumber desc limit 1		
+
+
+
+
+
+
+        ]]>
+    </select>
+
+    <select id="getLastestBlockByCoinCode" resultType="java.math.BigInteger">
+        <![CDATA[
+
+
+
+
+
+
+			select blockNumber from app_coin_transaction where coinType=#{0} order by id desc limit 1		
+
+
+
+
+
+
+        ]]>
+    </select>
+
+
+    <select id="listYesterdayRechargeRecord" resultType="hry.coin.coin.model.AppCoinTransaction">
+        <![CDATA[
+
+
+
+
+
+
+			select * from app_coin_transaction where coinType="eth" and  TO_DAYS(NOW())-TO_DAYS(created)=1;		  
+
+
+
+
+
+
+        ]]>
+    </select>
+</mapper>

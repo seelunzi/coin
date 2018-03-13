@@ -1,0 +1,1 @@
+package hry.coin.etc;// INTERNAL ERROR //

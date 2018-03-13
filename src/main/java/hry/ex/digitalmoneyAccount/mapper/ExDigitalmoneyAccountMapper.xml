@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hry.ex.digitalmoneyAccount.dao.ExDigitalmoneyAccountDao">
+    <select id="count" resultType="java.lang.Integer">
+		<![CDATA[
+
+
+
+
+
+
+
+			select count(*) from ex_digitalmoney_account where accountNum=#{0} and coinCode=#{1}	
+
+
+
+
+
+
+
+        ]]>
+	</select>
+
+    <select id="listAccountNumByCoinCode" resultType="java.lang.String">
+		<![CDATA[
+
+
+
+
+
+
+
+			select accountNum from ex_digitalmoney_account where publicKey is not null and publicKey!='' and coinCode=#{0};
+
+
+
+
+
+
+
+        ]]>
+	</select>
+
+    <select id="listPublicKeyByCoinCode" resultType="java.lang.String">
+		<![CDATA[
+
+
+
+
+
+
+
+			select publicKey from ex_digitalmoney_account where publicKey is not null and publicKey!='' and coinCode=#{0};	
+
+
+
+
+
+
+
+        ]]>
+	</select>
+
+
+    <select id="getEthPublicKeyByparams" resultType="java.lang.String">
+		<![CDATA[
+
+
+
+
+
+
+
+			select publicKey from ex_digitalmoney_account where publicKey like '0x%' and CHARACTER_LENGTH(publicKey)=42 and  userName=#{0} limit 1;
+
+
+
+
+
+
+
+        ]]>
+	</select>
+
+
+    <select id="listEtherpublickey" resultType="java.lang.String">
+		<![CDATA[
+
+
+
+
+
+
+
+			select publicKey from ex_digitalmoney_account GROUP BY publicKey HAVING publicKey like '0x%' and CHARACTER_LENGTH(publicKey)=42;
+
+
+
+
+
+
+
+        ]]>
+	</select>
+
+
+    <select id="getAccountByAccountNumber" resultType="hry.ex.digitalmoneyAccount.model.ExDigitalmoneyAccount">
+		<![CDATA[
+
+
+
+
+
+
+
+			select * from ex_digitalmoney_account where accountNum=#{0};
+
+
+
+
+
+
+
+        ]]>
+	</select>
+
+</mapper>

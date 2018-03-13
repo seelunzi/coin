@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="hry.coin.coin.dao.CoinTransactionDao">
+
+    <select id="isExists" resultType="java.lang.Integer">
+        <![CDATA[
+
+
+
+
+
+         SELECT COUNT(*)  FROM `coin_transaction` WHERE  txIdType = #{0}
+
+
+
+
+
+        ]]>
+    </select>
+
+
+    <select id="isexistHash" resultType="java.math.BigDecimal">
+        <![CDATA[
+
+
+
+
+
+         SELECT COUNT(*)  FROM `coin_transaction` WHERE  blockHash = #{0}
+
+
+
+
+
+        ]]>
+    </select>
+
+
+    <select id="findTransactionListByconfirm" resultType="hry.exchange.coin.model.Transaction">
+        SELECT
+        *
+        FROM coin_transaction WHERE coinType=#{0} and isCreateOrder=#{1} and category=#{2}
+    </select>
+
+    <select id="findTransactionListIsRollOut" resultType="hry.exchange.coin.model.Transaction">
+        SELECT
+        *
+        FROM coin_transaction WHERE coinType=#{0} and isRollOut=#{1} and category=#{2}
+    </select>
+
+    <!-- 查询coin_transaction表获取昨天0点到24点的所有充值订单 group by 手机号 -->
+    <!-- 还需要去除掉a000000账户 和 type+withdraw这种提币账户 -->
+    <select id="getAllRechargeTransactionsYesterday" resultType="hry.exchange.coin.model.Transaction">
+        SELECT * FROM coin_transaction
+        WHERE coinType=#{0}
+        and TO_DAYS(NOW())-TO_DAYS(created)=2
+        and category='receive'
+        and isCreateOrder=1
+        and account NOT LIKE '%a000000%'
+        and account NOT LIKE '%withdraw%'
+        group by account
+    </select>
+</mapper>
