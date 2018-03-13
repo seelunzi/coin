@@ -45,13 +45,7 @@
 
 
 
-
 			select blockNumber from app_coin_transaction  order by blockNumber desc limit 1		
-
-
-
-
-
 
         ]]>
     </select>
