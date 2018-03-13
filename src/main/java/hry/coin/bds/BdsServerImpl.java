@@ -14,7 +14,6 @@ import org.nutz.json.Json;
 import java.math.BigDecimal;
 import java.net.ConnectException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,19 +27,12 @@ public class BdsServerImpl
         String methodName = "list_account_balances";
         List<String> list = new ArrayList();
         List result = null;
-
         list.add(accountName);
-
         try {
-
             result = (List) this.client.invoke(methodName, list, List.class);
-
         } catch (Throwable e) {
-
             e.printStackTrace();
-
         }
-
         if ((result != null) && (!result.isEmpty())) {
             Map<String, Object> map = (Map) result.get(0);
             String amount_ = map.get("amount").toString();
@@ -53,13 +45,9 @@ public class BdsServerImpl
 
     @Override
     public String getPublicKey(String AccountNum) {
-
         String chargeAccount = BdsRpcHttpClient.chargeAccount;
-
         String memo = AccountNum;
-
         return "ACCOUNT:" + chargeAccount + ",MEMO:" + memo;
-
     }
 
     @Override
@@ -133,7 +121,7 @@ public class BdsServerImpl
                             Double amount = Double.valueOf(Double.valueOf(amount_).doubleValue() / 100000.0D);
                             int blockNumber = block_num;
                             String address = getPublicKey(memo);
-                            String time = new Date().getTime() + "";
+                            String time = System.currentTimeMillis() + "";
                             time = time.substring(0, time.length() - 3);
                             String txIdType = txId + "_transfer";
                             Transaction transaction = new Transaction();
@@ -172,7 +160,6 @@ public class BdsServerImpl
 
     @Override
     public String transfer(String fromAccount, String toAccount, String amount, String symbol, String memo) {
-
         String txId = null;
         String password = BdsRpcHttpClient.walletPassword;
         if (unlock(password)) {

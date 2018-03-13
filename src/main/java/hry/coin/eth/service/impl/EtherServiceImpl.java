@@ -53,7 +53,7 @@ import java.math.BigInteger;
 import java.net.NoRouteToHostException;
 import java.util.*;
 
-public class EtherService {
+public class EtherServiceImpl {
     public static final JsonRpc2_0Admin admin = AdminClient.getClient();
     public static JsonRpcHttpClient client = RpcHttpClient.getClient();
     public static Map<String, String> coinMap = Properties.appcoinMap();
@@ -62,7 +62,7 @@ public class EtherService {
     public static final String ETH_ACCOUNTS = "eth_accounts";
     public static final String BLOCKNUMBER = "blockNumber";
 
-    public EtherService() {
+    public EtherServiceImpl() {
     }
 
     public static List<String> listAccount() {
@@ -75,14 +75,22 @@ public class EtherService {
         }
     }
 
+    /***
+     * 创建以太坊的钱包地址
+     * */
     public static String createAddress(String password) {
         String address = null;
-
         try {
+            /**
+             * admin新建个人账户，钱包节点的密码
+             * */
             NewAccountIdentifier account = (NewAccountIdentifier) admin.personalNewAccount(password).send();
             address = account.getAccountId();
             String eth_accounts_str = RedisUtil.getValue("eth_accounts");
             if (StringUtils.isNotEmpty(address) && StringUtils.isNotEmpty(eth_accounts_str)) {
+                /***
+                 * 如果redis里面没有以太坊的钱包地址，就放进去
+                 * */
                 List<String> eth_accounts = JSON.parseArray(eth_accounts_str, String.class);
                 if (!eth_accounts.contains(address)) {
                     eth_accounts.add(address);
@@ -94,14 +102,18 @@ public class EtherService {
         } catch (IOException var6) {
             var6.printStackTrace();
         }
-
         return address;
     }
 
+    /***
+     * 得到以太坊地址的balance
+     * */
     public static BigInteger getBalance(String address) {
         BigInteger balance = BigInteger.ZERO;
-
         try {
+            /***
+             * 得到以太坊的balance
+             * */
             EthGetBalance ethBalance = (EthGetBalance) admin.ethGetBalance(address, DefaultBlockParameterName.LATEST).send();
             balance = ethBalance.getBalance();
         } catch (NoRouteToHostException var3) {
@@ -113,9 +125,11 @@ public class EtherService {
         return balance;
     }
 
+    /***
+     * 得到以太坊gas手续费的price
+     * */
     public static BigInteger getGasPrice() {
         BigInteger gasPrice = BigInteger.ZERO;
-
         try {
             EthGasPrice ethGasPrice = (EthGasPrice) admin.ethGasPrice().send();
             gasPrice = ethGasPrice.getGasPrice();
@@ -144,7 +158,6 @@ public class EtherService {
 
     public static boolean unlockAccount(String address, String password) {
         Boolean result = false;
-
         try {
             PersonalUnlockAccount account = (PersonalUnlockAccount) admin.personalUnlockAccount(address, password).send();
             result = account.accountUnlocked();
@@ -153,13 +166,11 @@ public class EtherService {
         } catch (IOException var5) {
             var5.printStackTrace();
         }
-
         return result;
     }
 
     public static String sendTransaction(Transaction t, String password) {
         String result = null;
-
         try {
             result = ((EthSendTransaction) admin.personalSendTransaction(t, password).send()).getTransactionHash();
         } catch (NoRouteToHostException var4) {
@@ -167,7 +178,6 @@ public class EtherService {
         } catch (IOException var5) {
             var5.printStackTrace();
         }
-
         return result;
     }
 
@@ -186,9 +196,7 @@ public class EtherService {
         }
     }
 
-    /**
-     * @deprecated
-     */
+
     @Deprecated
     public static void catchUpToLatestAndSubscribeToNewTransactionsObservable() {
         String ETH = "ETH";
@@ -203,7 +211,6 @@ public class EtherService {
             var5.printStackTrace();
         }
 
-//        DefaultBlockParameter startblockNumber;
         if (lastestBlockNumber != null) {
             startblockNumber = DefaultBlockParameter.valueOf(lastestBlockNumber);
         } else {
@@ -267,7 +274,6 @@ public class EtherService {
                         }
                     }
                 }
-
             });
         } else {
             LogFactory.info("geth钱包rpc连接ERROR");
@@ -331,7 +337,6 @@ public class EtherService {
             String fromAddress = null;
             String toAddress = getBasecoin();
             Iterator var4 = list.iterator();
-
             while (var4.hasNext()) {
                 String l = (String) var4.next();
                 if (StringUtils.isNotEmpty(l) && !l.equalsIgnoreCase(toAddress)) {
@@ -374,7 +379,6 @@ public class EtherService {
 
     public static String getBasecoin() {
         String coinbase = null;
-
         try {
             coinbase = ((EthCoinbase) admin.ethCoinbase().send()).getAddress();
         } catch (NoRouteToHostException var2) {
@@ -384,7 +388,6 @@ public class EtherService {
         } catch (NullPointerException var4) {
             var4.printStackTrace();
         }
-
         return coinbase;
     }
 
@@ -434,7 +437,6 @@ public class EtherService {
         } else {
             LogFactory.info("解锁提币账户失败");
         }
-
         return null;
     }
 
@@ -443,7 +445,6 @@ public class EtherService {
         if (address.length() == 42 && address.startsWith("0x")) {
             result = true;
         }
-
         return result;
     }
 
@@ -459,7 +460,6 @@ public class EtherService {
         } catch (Throwable var4) {
             var4.printStackTrace();
         }
-
         return null;
     }
 
@@ -493,6 +493,9 @@ public class EtherService {
         return wallet;
     }
 
+    /****
+     * 提币操作
+     * */
     public static JsonResult sendFrom(String amount, String toAddress) {
         JsonResult result = new JsonResult();
         String fromAddress = getBasecoin();
@@ -521,6 +524,9 @@ public class EtherService {
         return result;
     }
 
+    /***
+     *智能合约提币操作
+     * */
     public static JsonResult smartContract_sendFrom(String type, String amount, String toAddress) {
         JsonResult result = new JsonResult();
         type = type.toUpperCase();

@@ -32,7 +32,6 @@ public class NeoRpcHttpClient {
         try {
             url = protocol + "://" + ip + ":" + port + "?jsonrpc=2.0&id=1&method=" + methodname + "&params=" + URLEncoder.encode(new StringBuilder().append(list).append("").toString(), "UTF-8");
         } catch (UnsupportedEncodingException e2) {
-
             e2.printStackTrace();
         }
         String result = "";

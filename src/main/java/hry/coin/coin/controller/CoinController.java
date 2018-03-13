@@ -6,7 +6,7 @@ import com.azazar.bitcoin.jsonrpcclient.Bitcoin.Transaction;
 import hry.coin.CoinService;
 import hry.coin.bds.BdsServerImpl;
 import hry.coin.coin.service.CoinTransactionService;
-import hry.coin.eth.service.impl.EtherService;
+import hry.coin.eth.service.impl.EtherServiceImpl;
 import hry.coin.impl.CoinServiceImpl;
 import hry.coin.impl.JsonrpcClient;
 import hry.coin.impl.MyCoinService;
@@ -62,12 +62,12 @@ public class CoinController {
         if ((StringUtils.isNotEmpty(userName)) && (StringUtils.isNotEmpty(type)) && (StringUtils.isNotEmpty(accountNumber))) {
             try {
                 type = type.toUpperCase();
-                if ((type.equalsIgnoreCase("ETH")) || (EtherService.isSmartContractCoin(type))) {
+                if ((type.equalsIgnoreCase("ETH")) || (EtherServiceImpl.isSmartContractCoin(type))) {
                     String result = this.exDigitalmoneyAccountService.getEthPublicKeyByparams(userName);
                     if (StringUtils.isNotEmpty(result)) {
                         address = result;
                     } else {
-                        address = EtherService.createAddress(EtherService.PASSWORD);
+                        address = EtherServiceImpl.createAddress(EtherServiceImpl.PASSWORD);
                     }
                 } else if (type.equalsIgnoreCase("tv")) {
                     address = TvUtil.createAccount(accountNumber);
@@ -140,9 +140,9 @@ public class CoinController {
                         type = type.toUpperCase();
                         LogFactory.info("提币数量： digit=" + digit + " amount=" + amount + " type=" + type);
                         if (type.equalsIgnoreCase("ETH")) {
-                            result = EtherService.sendFrom(amount, toAddress);
-                        } else if (EtherService.isSmartContractCoin(type)) {
-                            result = EtherService.smartContract_sendFrom(type, amount, toAddress);
+                            result = EtherServiceImpl.sendFrom(amount, toAddress);
+                        } else if (EtherServiceImpl.isSmartContractCoin(type)) {
+                            result = EtherServiceImpl.smartContract_sendFrom(type, amount, toAddress);
                         } else if (type.equalsIgnoreCase("tv")) {
                             result = TvUtil.sendFrom(amount, toAddress, memo, transactionNum);
                         } else if (type.equalsIgnoreCase("USDT")) {
@@ -201,8 +201,8 @@ public class CoinController {
             if ((StringUtil.isNull(type)) && (StringUtil.isNull(address))) {
                 if (type.toUpperCase().equals("ETH")) {
                     list.add("0");
-                    address = EtherService.getBasecoin();
-                    BigInteger money = EtherService.getBalance(address);
+                    address = EtherServiceImpl.getBasecoin();
+                    BigInteger money = EtherServiceImpl.getBalance(address);
                     list.add(Convert.fromWei(money.toString(), Convert.Unit.ETHER).toString());
                 } else {
                     CoinService coinService = new CoinServiceImpl(type);
@@ -227,9 +227,9 @@ public class CoinController {
             Wallet wallet = new Wallet();
             LogFactory.info("币名称:" + coinCode);
             if (coinCode.equalsIgnoreCase("ETH")) {
-                wallet = EtherService.getEtherWalletInfo();
-            } else if (EtherService.isSmartContractCoin(coinCode)) {
-                wallet = EtherService.smartContract_getWalletInfo(coinCode);
+                wallet = EtherServiceImpl.getEtherWalletInfo();
+            } else if (EtherServiceImpl.isSmartContractCoin(coinCode)) {
+                wallet = EtherServiceImpl.smartContract_getWalletInfo(coinCode);
             } else if (coinCode.equalsIgnoreCase("tv")) {
                 wallet = TvUtil.getWalletInfo();
             } else if (coinCode.equalsIgnoreCase("USDT")) {
@@ -280,9 +280,9 @@ public class CoinController {
                 if (isValidAddress) {
 
                     if (type.equalsIgnoreCase("ETH")) {
-                        result = EtherService.send2ColdWallet(toAddress, amount);
+                        result = EtherServiceImpl.send2ColdWallet(toAddress, amount);
 
-                    } else if (EtherService.isSmartContractCoin(type)) {
+                    } else if (EtherServiceImpl.isSmartContractCoin(type)) {
 
                         result.setMsg(type + "转入冷钱包失败");
 
@@ -618,9 +618,9 @@ public class CoinController {
         /* 579 */
         if ((StringUtils.isNotEmpty(coinCode)) && (StringUtils.isNotEmpty(address))) {
             /* 580 */
-            if ((coinCode.equalsIgnoreCase("ETH")) || (EtherService.isSmartContractCoin(coinCode))) {
+            if ((coinCode.equalsIgnoreCase("ETH")) || (EtherServiceImpl.isSmartContractCoin(coinCode))) {
                 /* 581 */
-                if (EtherService.isAddress(address)) {
+                if (EtherServiceImpl.isAddress(address)) {
                     /* 582 */
                     result.setSuccess(Boolean.valueOf(true));
                     /* 583 */
@@ -726,7 +726,7 @@ public class CoinController {
         /* 639 */
         if ((StringUtils.isNotEmpty(hash)) && (hash.length() == 66)) {
             /* 640 */
-            EtherService.recaptureGethTx(hash);
+            EtherServiceImpl.recaptureGethTx(hash);
             /*     */
         } else {
             /* 642 */

@@ -2,7 +2,7 @@
 package hry.coin.eth.controller;
 
 
-import hry.coin.eth.service.impl.EtherService;
+import hry.coin.eth.service.impl.EtherServiceImpl;
 import hry.utils.CommonUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +49,7 @@ public class EthCoinController {
 
         try {
 
-            String address = EtherService.createAddress("a00000000");
+            String address = EtherServiceImpl.createAddress("a00000000");
 
             if (address != null) {
 
@@ -89,7 +89,7 @@ public class EthCoinController {
         /*     */
         try {
             /*  69 */
-            BigInteger balance = EtherService.getBalance(address);
+            BigInteger balance = EtherServiceImpl.getBalance(address);
             /*  70 */
             if (balance != null) {
                 /*  71 */
@@ -123,7 +123,7 @@ public class EthCoinController {
     /*     */ public List<String> listAccounts(HttpServletRequest req)
         /*     */ {
         /* 138 */
-        return EtherService.listAccount();
+        return EtherServiceImpl.listAccount();
         /*     */
     }
 
@@ -145,7 +145,7 @@ public class EthCoinController {
 
         if (CommonUtil.isNoHasEmptyInListstr(list)) {
 
-            return EtherService.unlockAccount(address, password) ? "解锁成功" : "解锁失败";
+            return EtherServiceImpl.unlockAccount(address, password) ? "解锁成功" : "解锁失败";
 
         }
 

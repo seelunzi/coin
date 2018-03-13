@@ -18,6 +18,9 @@ public class AdminClient {
                 if (admin == null) {
                     String url = protocol + ":" + ip + ":" + port;
                     LogFactory.info("获取eth的jsonrpc连接===url=" + url);
+                    /***
+                     *连接以太坊的钱包节点
+                     * */
                     admin = Admin.build(new HttpService(url));
                 }
             }

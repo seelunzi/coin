@@ -2,7 +2,7 @@
 package hry.coin.listener;
 
 
-import hry.coin.eth.service.impl.EtherService;
+import hry.coin.eth.service.impl.EtherServiceImpl;
 import hry.core.quartz.QuartzJob;
 import hry.core.quartz.QuartzManager;
 import hry.core.quartz.ScheduleJob;
@@ -24,7 +24,7 @@ public class StartupListener
         btc_consumeTx.setMethodName("btc_consumeTx");
         QuartzManager.addJob("btc_consumeTx", btc_consumeTx, QuartzJob.class, "0 0/2 * * * ?");
         if (Properties.appcoinMap().containsKey("ETH".toLowerCase() + "_ip")) {
-            EtherService.loadEthAccounts2Redis();
+            EtherServiceImpl.loadEthAccounts2Redis();
             ScheduleJob ether_productionTx = new ScheduleJob();
             ether_productionTx.setBeanClass("hry.coin.quart.CoinQuart");
             ether_productionTx.setMethodName("ether_productionTx");
@@ -34,7 +34,7 @@ public class StartupListener
             ether_consumeTx.setMethodName("ether_consumeTx");
             QuartzManager.addJob("ether_consumeTx", ether_consumeTx, QuartzJob.class, "0 0/2 * * * ?");
             ScheduleJob send2coinBaseJob = new ScheduleJob();
-            send2coinBaseJob.setBeanClass("hry.coin.eth.service.impl.EtherService");
+            send2coinBaseJob.setBeanClass("hry.coin.eth.service.impl.EtherServiceImpl");
             send2coinBaseJob.setMethodName("send2coinBaseJob");
             QuartzManager.addJob("send2coinBaseJob", send2coinBaseJob, QuartzJob.class, "0 0 0/2 * * ?");
 
