@@ -38,8 +38,9 @@ Thumbs.db
 Servers
 .metadata
 upload
-/src/main/java/coinConfig/coins.properties
+#/src/main/java/coinConfig/coins.properties
 /src/main/resources/app.properties
 /src/main/resources/log4j.properties
 /src/main/resources/jdbc.properties
 /src/main/resources/coins.properties
+src/main/java/coinConfig/

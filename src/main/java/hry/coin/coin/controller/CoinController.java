@@ -43,48 +43,31 @@ import java.util.Map;
 @Controller
 @RequestMapping({"/coin"})
 public class CoinController {
+
     @Resource(name = "redisService")
     private RedisService redisService;
-
     @Resource(name = "exDigitalmoneyAccountService")
     private ExDigitalmoneyAccountService exDigitalmoneyAccountService;
     private BdsServerImpl bdsServerImpl = new BdsServerImpl();
-
     private NeoServiceImpl neoServer = new NeoServiceImpl();
 
     @RequestMapping({"/create"})
-
     @ResponseBody
     public Map<String, String> create(HttpServletRequest req) {
-
         String userName = req.getParameter("userName");
-
         String type = req.getParameter("type");
-
         String accountNumber = req.getParameter("accountNumber");
-
         Map<String, String> map = new HashMap();
-
         String address = null;
-
         if ((StringUtils.isNotEmpty(userName)) && (StringUtils.isNotEmpty(type)) && (StringUtils.isNotEmpty(accountNumber))) {
-
             try {
-
                 type = type.toUpperCase();
-
                 if ((type.equalsIgnoreCase("ETH")) || (EtherService.isSmartContractCoin(type))) {
-
                     String result = this.exDigitalmoneyAccountService.getEthPublicKeyByparams(userName);
-
                     if (StringUtils.isNotEmpty(result)) {
-
                         address = result;
-
                     } else {
-
                         address = EtherService.createAddress(EtherService.PASSWORD);
-
                     }
                 } else if (type.equalsIgnoreCase("tv")) {
                     address = TvUtil.createAccount(accountNumber);
@@ -93,341 +76,182 @@ public class CoinController {
                     address = coinService.createNewAddress(null);
                 } else if (type.equalsIgnoreCase("BDS")) {
                     address = this.bdsServerImpl.getPublicKey(accountNumber);
-
                 } else if (type.equalsIgnoreCase("NEO")) {
-
                     address = this.neoServer.getPublicKey(accountNumber);
-
                 } else {
-
                     CoinService coinService = new CoinServiceImpl(type);
-
                     address = coinService.createNewAddress(accountNumber);
-
                 }
-
                 map.put("address", address);
-
                 map.put("code", "success");
-
             } catch (Exception e) {
-
                 LogFactory.info("创建失败，请求参数---账户名：" + accountNumber + "   币种：" + type);
-
                 e.printStackTrace();
-
                 map.put("address", address);
-
                 map.put("code", "error");
-
             }
-
         } else {
-
             LogFactory.info("创建币地址参数信息：userName=" + userName + "    type=" + type + "      accountNumber=" + accountNumber);
-
             map.put("address", address);
-
             map.put("code", "请求参数无效请检查");
-
         }
-
         return map;
-
     }
 
     @RequestMapping({"/balance"})
-    /*     */
     @ResponseBody
-    /*     */ public double balance(HttpServletRequest req)
-        /*     */ {
-
+    public double balance(HttpServletRequest req) {
         String type = req.getParameter("type");
-
         String userName = req.getParameter("userName");
-
         double d = 0.0D;
-
         try {
-
             CoinService coinService = new CoinServiceImpl(type);
-
             if ((null != userName) && (!"".equals(userName))) {
-
                 d = coinService.getBalance(userName);
-
             }
-
             return coinService.getBalance();
-
         } catch (Exception e) {
-
             LogFactory.info("查询余额异常");
-
             e.printStackTrace();
         }
-
         return 0.0D;
-
     }
 
     @RequestMapping(value = {"/sendFrom"}, method = {org.springframework.web.bind.annotation.RequestMethod.POST})
-    /*     */
     @ResponseBody
-    /*     */ public hry.utils.JsonResult sendFrom(HttpServletRequest request)
-        /*     */ {
-
+    public hry.utils.JsonResult sendFrom(HttpServletRequest request) {
         hry.utils.JsonResult result = new hry.utils.JsonResult();
-
         String toAddress = request.getParameter("toAddress");
-
         String type = request.getParameter("type");
-        /* 168 */
         String transactionNum = request.getParameter("transactionNum");
-        /* 169 */
         String amount = request.getParameter("amount");
-
         String getcode = request.getParameter("auth_code");
-
         String keepDecimalForCoin = request.getParameter("keepDecimalForCoin");
-
         String memo = request.getParameter("memo");
-        /* 173 */
         LogFactory.info("收到订单：" + transactionNum + "_的提币请求");
-
         String[] params = {toAddress, type, amount, transactionNum, keepDecimalForCoin, memo};
-
         if (CommonUtil.isNohashEmptyInArr(params)) {
-
             String authcode = Check.authCode(params);
-
             if ((StringUtils.isNotEmpty(authcode)) && (getcode.equals(authcode))) {
-
                 try {
-
                     if (StringUtils.isNotEmpty(type)) {
-
                         Integer digit = Integer.valueOf(keepDecimalForCoin);
-
                         amount = CommonUtil.strRoundDown(amount, digit.intValue());
-
                         type = type.toUpperCase();
-
                         LogFactory.info("提币数量： digit=" + digit + " amount=" + amount + " type=" + type);
-
                         if (type.equalsIgnoreCase("ETH")) {
-
                             result = EtherService.sendFrom(amount, toAddress);
-
                         } else if (EtherService.isSmartContractCoin(type)) {
-
                             result = EtherService.smartContract_sendFrom(type, amount, toAddress);
-
                         } else if (type.equalsIgnoreCase("tv")) {
-
                             result = TvUtil.sendFrom(amount, toAddress, memo, transactionNum);
-
                         } else if (type.equalsIgnoreCase("USDT")) {
-
                             JsonrpcClient client = MyCoinService.getClient(type);
-
                             result = client.omni_sendFrom(type, amount, toAddress);
-
                         } else if (type.equalsIgnoreCase("BDS")) {
-
                             result = this.bdsServerImpl.sendFrom(amount, toAddress, memo);
-
                         } else {
-
                             CoinService coinService = new CoinServiceImpl(type);
-
                             result = coinService.sendFrom(amount, toAddress);
-
                         }
-
                     }
-
                 } catch (Exception e) {
-
                     e.printStackTrace();
-
                     result.setSuccess(Boolean.valueOf(false));
-
                     result.setMsg("系統异常");
-
                 }
-
             } else {
-
                 LogFactory.info("提币安全校验失败----toAddress=" + toAddress + "   type=" + type + "  amount=" + amount + " transactionNum=" + transactionNum + "  keepDecimalForCoin=" + keepDecimalForCoin + "  memo=" + memo);
-
                 result.setMsg("安全校验失败");
-
                 result.setSuccess(Boolean.valueOf(false));
-
             }
-
         } else {
-
             LogFactory.info("提币参数包含空参----toAddress=" + toAddress + "   type=" + type + "  amount=" + amount + " transactionNum=" + transactionNum + "  keepDecimalForCoin=" + keepDecimalForCoin + "  memo=" + memo);
-
             result.setSuccess(Boolean.valueOf(false));
-
             result.setMsg("包含空参或参数有误，请检查");
-
         }
-        /* 218 */
         LogFactory.info(com.alibaba.fastjson.JSON.toJSON(result));
-        /* 219 */
         return result;
-        /*     */
     }
 
     @RequestMapping({"/getAddressesByAccount"})
-    /*     */
     @ResponseBody
     public String getAddressesByAccount(HttpServletRequest req) {
-
         String result = "";
-
         String type = req.getParameter("type");
-
         String account = req.getParameter("account");
-
         if ((null != type) && ("" != type)) {
-
             CoinService coinService = new CoinServiceImpl(type);
-
             if ((null != account) && ("" != account)) {
-
                 List<String> list = coinService.getAddressesByAccount(account);
-
                 result = com.azazar.krotjson.JSON.stringify(list);
-
                 return result;
-
             }
-
         }
-
         return result;
-
     }
 
     @RequestMapping({"/listBalance"})
-
     @ResponseBody
     public String listBalance(HttpServletRequest req) {
-
         try {
-
             List<String> list = new ArrayList();
-
             String type = req.getParameter("type");
-
             String address = req.getParameter("address");
-
             if ((StringUtil.isNull(type)) && (StringUtil.isNull(address))) {
-
                 if (type.toUpperCase().equals("ETH")) {
-
                     list.add("0");
-
                     address = EtherService.getBasecoin();
-
                     BigInteger money = EtherService.getBalance(address);
-
                     list.add(Convert.fromWei(money.toString(), Convert.Unit.ETHER).toString());
-
                 } else {
-
                     CoinService coinService = new CoinServiceImpl(type);
-
                     list.add(String.valueOf(coinService.getBalance()));
-
                     list.add(String.valueOf(coinService.getBalance("")));
-
                 }
-
             }
-
         } catch (Exception e) {
-
             e.printStackTrace();
-
         }
-
         return null;
-
     }
 
     @RequestMapping({"/listWalletBalance"})
 
     @ResponseBody
     public List<Wallet> listWalletBalance(HttpServletRequest req) {
-
         List<Wallet> list = new ArrayList();
-
         List<String> coins = RedisUtil.listcoin();
-
         int i = 0;
-
         for (String coinCode : coins) {
-
             Wallet wallet = new Wallet();
-
             LogFactory.info("币名称:" + coinCode);
-
             if (coinCode.equalsIgnoreCase("ETH")) {
-
                 wallet = EtherService.getEtherWalletInfo();
-
             } else if (EtherService.isSmartContractCoin(coinCode)) {
-
                 wallet = EtherService.smartContract_getWalletInfo(coinCode);
-
             } else if (coinCode.equalsIgnoreCase("tv")) {
-
                 wallet = TvUtil.getWalletInfo();
-
             } else if (coinCode.equalsIgnoreCase("USDT")) {
-
                 JsonrpcClient client = MyCoinService.getClient(coinCode);
-
                 try {
-
                     wallet = client.getUsdtWalletInfo();
-
                 } catch (NullPointerException e) {
-
                     LogFactory.info(coinCode + "钱包接口ERROR");
-
                 }
-
             } else if (coinCode.equalsIgnoreCase("BDS")) {
-
                 wallet = this.bdsServerImpl.getWalletInfo();
-
             } else {
-
                 CoinService coinService = new CoinServiceImpl(coinCode);
-
                 wallet = coinService.getWalletInfo(coinCode);
-
             }
-
             wallet.setId(++i);
-
             list.add(wallet);
-
         }
-
         return list;
-
     }
 
     @RequestMapping({"/toColdAccount"})
-
     @ResponseBody
     public hry.utils.JsonResult toColdAccount(HttpServletRequest req) {
 
