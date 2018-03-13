@@ -8,13 +8,13 @@ import java.util.List;
 
 public abstract interface AppCoinTransactionDao
         extends BaseDao<AppCoinTransaction, Long> {
-    public abstract List<AppCoinTransaction> consumeTx();
+    List<AppCoinTransaction> consumeTx();
 
-    public abstract int existNumber(String paramString);
+    int existNumber(String paramString);
 
-    public abstract BigInteger getLastestBlock();
+    BigInteger getLastestBlock();
 
-    public abstract BigInteger getLastestBlockByCoinCode(String paramString);
+    BigInteger getLastestBlockByCoinCode(String paramString);
 
-    public abstract List<AppCoinTransaction> listYesterdayRechargeRecord(String paramString);
+    List<AppCoinTransaction> listYesterdayRechargeRecord(String paramString);
 }

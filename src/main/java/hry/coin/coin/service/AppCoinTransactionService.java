@@ -6,21 +6,15 @@ import hry.core.mvc.service.base.BaseService;
 import java.math.BigInteger;
 import java.util.List;
 
-public abstract interface AppCoinTransactionService
+public interface AppCoinTransactionService
         extends BaseService<AppCoinTransaction, Long> {
-    public abstract List<AppCoinTransaction> consumeTx();
+    List<AppCoinTransaction> consumeTx();
 
-    public abstract int existNumber(String paramString);
+    int existNumber(String paramString);
 
-    public abstract BigInteger getLastestBlock();
+    BigInteger getLastestBlock();
 
-    public abstract BigInteger getLastestBlockByCoinCode(String paramString);
+    BigInteger getLastestBlockByCoinCode(String paramString);
 
-    public abstract List<AppCoinTransaction> listYesterdayRechargeRecord(String paramString);
+    List<AppCoinTransaction> listYesterdayRechargeRecord(String paramString);
 }
-
-
-/* Location:              E:\coin.war!\WEB-INF\classes\hry\coin\coin\service\AppCoinTransactionService.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */

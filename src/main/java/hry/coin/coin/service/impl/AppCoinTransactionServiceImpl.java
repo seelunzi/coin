@@ -14,29 +14,6 @@ import javax.annotation.Resource;
 import java.math.BigInteger;
 import java.util.List;
 
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
 @Service("appCoinTransactionService")
 /*    */ public class AppCoinTransactionServiceImpl
         /*    */ extends BaseServiceImpl<AppCoinTransaction, Long>
