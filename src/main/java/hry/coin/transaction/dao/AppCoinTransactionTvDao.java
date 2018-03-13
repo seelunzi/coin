@@ -5,15 +5,9 @@ import hry.core.mvc.dao.base.BaseDao;
 
 import java.util.List;
 
-public abstract interface AppCoinTransactionTvDao
+public interface AppCoinTransactionTvDao
         extends BaseDao<AppCoinTransactionTv, Long> {
-    public abstract int getcountBytrxid(String paramString);
+    int getcountBytrxid(String paramString);
 
-    public abstract List<String> listYesterdayRechargeRecord(String paramString);
+    List<String> listYesterdayRechargeRecord(String paramString);
 }
-
-
-/* Location:              E:\coin.war!\WEB-INF\classes\hry\coin\transaction\dao\AppCoinTransactionTvDao.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */
