@@ -3,11 +3,13 @@ package hry.coin.mobilecoin.model;
 
 
 import hry.core.mvc.model.BaseModel;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Table(name = "mobile_customer")
+@Data
 public class MobileCustomer
         extends BaseModel {
     @Id

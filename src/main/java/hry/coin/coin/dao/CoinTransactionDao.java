@@ -6,7 +6,7 @@ import hry.exchange.coin.model.Transaction;
 import java.math.BigDecimal;
 import java.util.List;
 
-public abstract interface CoinTransactionDao
+public interface CoinTransactionDao
         extends BaseDao<Transaction, Long> {
     int isExists(String paramString);
 
