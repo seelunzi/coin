@@ -217,7 +217,6 @@ public class CoinController {
     }
 
     @RequestMapping({"/listWalletBalance"})
-
     @ResponseBody
     public List<Wallet> listWalletBalance(HttpServletRequest req) {
         List<Wallet> list = new ArrayList();
@@ -254,536 +253,270 @@ public class CoinController {
     @RequestMapping({"/toColdAccount"})
     @ResponseBody
     public hry.utils.JsonResult toColdAccount(HttpServletRequest req) {
-
         hry.utils.JsonResult result = new hry.utils.JsonResult();
-
         Map<String, String> map = new HashMap();
-
         String type = req.getParameter("type");
-
         String amount = req.getParameter("amount");
-
         String fromAddress = "-";
-
         if ((StringUtils.isNotEmpty(type)) && (StringUtils.isNotEmpty(amount))) {
-
             type = type.toUpperCase();
-
             BigDecimal money = new BigDecimal(amount);
-
             String toAddress = (String) Properties.appcoinMap().get(type.toLowerCase() + "_coldAddress");
-
             boolean isValidAddress = true;
-
             if (StringUtils.isNotEmpty(toAddress)) {
-
                 if (isValidAddress) {
-
                     if (type.equalsIgnoreCase("ETH")) {
                         result = EtherServiceImpl.send2ColdWallet(toAddress, amount);
-
                     } else if (EtherServiceImpl.isSmartContractCoin(type)) {
-
                         result.setMsg(type + "转入冷钱包失败");
-
                     } else if (type.equalsIgnoreCase("tv")) {
-
                         result = TvUtil.send2ColdAddress(toAddress, amount);
-
                     } else if (type.equalsIgnoreCase("USDT")) {
-
                         result.setMsg(type + "转入冷钱包失败");
-
                     } else if (type.equalsIgnoreCase("BDS")) {
-
                         result = this.bdsServerImpl.send2ColdAddress(toAddress, amount);
-
                     } else {
-
                         CoinService coinService = new CoinServiceImpl(type);
-
                         result = coinService.sendtoAddress(toAddress, Double.valueOf(money.doubleValue()));
-
                     }
-
                     if ((result.getSuccess().booleanValue()) && (StringUtils.isNotEmpty(result.getMsg()))) {
-
                         map.put("toAddress", toAddress);
-
                         map.put("fromAddress", fromAddress);
-
                         map.put("txHash", result.getMsg());
-
                         result.setObj(map);
-
                     } else {
-
                         LogFactory.info("转币冷钱包失败：" + com.alibaba.fastjson.JSON.toJSONString(result));
-
                     }
-
                 } else {
-
                     result.setMsg(type + "_冷钱包地址无效，请检查");
-
                 }
-
             } else {
-
                 result.setMsg(type + "_冷钱包地址为空,请检查");
-
             }
-
         } else {
-
             result.setMsg("参数无效，请检查--type=" + type + "   amount=" + amount);
-
         }
-
         if (!result.getSuccess().booleanValue()) {
-
             LogFactory.info("转入冷钱包操作失败：" + result.getMsg());
-
         }
-
         return result;
-
     }
 
     @RequestMapping({"/list"})
-
     @ResponseBody
     public String list(HttpServletRequest req) {
-
         String type = req.getParameter("type");
-
         String userName = req.getParameter("userName");
-
         String count = req.getParameter("count");
-
         String startWith = req.getParameter("start");
-
         List<Transaction> list = null;
-
         String result = "";
-
         try {
-
             CoinService coinService = new CoinServiceImpl(type);
-
             if ((null != count) && (!"".equals(count))) {
-
                 list = coinService.listTransactions(userName, Integer.valueOf(count));
-
                 result = com.azazar.krotjson.JSON.stringify(list);
-
                 if ((null != startWith) && (!"".equals(startWith))) {
-
                     list = coinService.listTransactions(userName, Integer.valueOf(count).intValue(), Integer.valueOf(startWith).intValue());
-
                     result = com.azazar.krotjson.JSON.stringify(list);
-
                 } else {
-
                     list = coinService.listTransactions(userName, Integer.valueOf(count));
-
                     result = com.azazar.krotjson.JSON.stringify(list);
-
                 }
-
             } else {
-
                 list = coinService.listTransactions(userName, null);
-
                 result = com.azazar.krotjson.JSON.stringify(list);
             }
             System.out.println("====交易记录返回" + result);
-
             return result;
-
         } catch (Exception e) {
+
         }
-
         return "Call interface error";
-
     }
 
     @RequestMapping({"/allList"})
-
     @ResponseBody
     public String allList(HttpServletRequest req) {
-
         String type = req.getParameter("type");
-
         List<Bitcoin.Transaction> list = null;
-
         String result = "";
-
         try {
-
             CoinService coinService = new CoinServiceImpl(type);
-
             list = coinService.listTransactions(null, null);
-
             result = com.azazar.krotjson.JSON.stringify(list);
-
             System.out.println("====" + list.toString());
-
         } catch (Exception e) {
-
             System.out.println("err:" + e.getMessage());
-
         }
-
         return result;
-
     }
 
     @RequestMapping({"/row"})
-
     @ResponseBody
     public String row(HttpServletRequest req) {
-
         String orderNO = req.getParameter("orderNo");
-
         String type = req.getParameter("type");
-
         String row = "";
-
         try {
-
             CoinService coinService = new CoinServiceImpl(type);
-
             row = coinService.getRawTransaction(orderNO);
-
         } catch (Exception e) {
-
             e.printStackTrace();
-
             row = "";
-
         }
-
         System.out.println("查询详细信息：" + row);
-
         return row;
-
     }
 
     @RequestMapping({"/listAccounts"})
-
     @ResponseBody
     public Map<String, Number> listAccounts(HttpServletRequest req) {
-
         String type = req.getParameter("type");
-
         if ((null != type) && ("" != type)) {
-
             CoinService coinService = new CoinServiceImpl(type);
-
             Map<String, Number> map = coinService.listaccounts();
-
             return map;
-
         }
-
         return null;
-
     }
 
     @RequestMapping({"/getAllUsers"})
-
     @ResponseBody
     public String getAllUsers(HttpServletRequest req) {
-
         String result = "";
-
         String type = req.getParameter("type");
-
         if ((null != type) && ("" != type)) {
-
             CoinService coinService = new CoinServiceImpl(type);
-
             Map<String, Number> map = coinService.listaccounts();
-
             result = com.azazar.krotjson.JSON.stringify(map);
-
             return result;
-
         }
-
         return result;
-
     }
 
     @RequestMapping({"/recordTransaction"})
-
     @ResponseBody
     public void recordTransaction() {
-
         String type = "dsc";
-
         CoinTransactionService txService = (CoinTransactionService) ContextUtil.getBean("coinTransactionService");
-
         hry.utils.JsonResult ret = txService.recordTransaction(type, null, null);
-
         System.out.println("ret==" + ret);
-
     }
 
     @RequestMapping({"/refreshUserCoin"})
-
     @MethodName(name = "单个用户刷币")
-
     @ResponseBody
     public hry.utils.JsonResult refreshUserCoin(HttpServletRequest request) {
-
         hry.utils.JsonResult ret = new hry.utils.JsonResult();
-        /* 540 */
         String coinCode = request.getParameter("coinCode");
-        /* 541 */
         String account = request.getParameter("account");
-        /* 542 */
         String countstr = request.getParameter("count");
-        /* 543 */
         int count = Integer.valueOf(countstr).intValue();
-        /* 544 */
         if ((StringUtils.isNotEmpty(coinCode)) && (StringUtils.isNotEmpty(account)) && (StringUtils.isNotEmpty(countstr))) {
-            /* 545 */
             String[] arrcoin = Properties.listCoinBasedBtc();
-            /* 546 */
             if ((arrcoin != null) && (arrcoin.length > 0) && (Json.toJson(arrcoin).contains(coinCode.toUpperCase()))) {
-                /* 547 */
                 CoinTransactionService txService = (CoinTransactionService) ContextUtil.getBean("coinTransactionService");
-                /* 548 */
                 if (coinCode.equalsIgnoreCase("USDT")) {
-                    /* 549 */
                     ExDigitalmoneyAccountService accountService = (ExDigitalmoneyAccountService) ContextUtil.getBean("exDigitalmoneyAccountService");
-                    /* 550 */
                     ExDigitalmoneyAccount coinAccount = accountService.getAccountByAccountNumber(account);
-                    /* 551 */
                     if ((coinAccount != null) && (StringUtils.isNotEmpty(coinAccount.getPublicKey()))) {
-                        /* 552 */
                         ret = txService.recordTransaction_omni(coinCode, coinAccount.getPublicKey(), 0, 0, 0, 0);
-                        /*     */
                     } else {
-                        /* 554 */
                         ret.setCode("0000");
-                        /*     */
                     }
-                    /*     */
                 } else {
-                    /* 557 */
                     ret = txService.recordTransaction(coinCode, account, Integer.valueOf(count));
-                    /*     */
                 }
-                /*     */
             }
-            /*     */
             else {
-                /* 561 */
                 ret.setCode("0000");
-                /* 562 */
                 ret.setMsg("网络错误");
-                /*     */
             }
-            /*     */
         } else {
-            /* 565 */
             ret.setMsg("参数不正确");
-            /* 566 */
             LogFactory.info("参数：" + Json.toJson(request.getParameterMap()));
-            /*     */
         }
-        /* 568 */
         return ret;
-        /*     */
     }
 
-    /*     */
-    /*     */
     @RequestMapping({"/validateaddress"})
-    /*     */
     @MethodName(name = "验证钱包地址是否有效")
-    /*     */
     @ResponseBody
-    /*     */ public hry.core.mvc.model.page.JsonResult validateaddress(HttpServletRequest request)
-    /*     */ {
-        /* 576 */
+    public hry.core.mvc.model.page.JsonResult validateaddress(HttpServletRequest request) {
         hry.core.mvc.model.page.JsonResult result = new hry.core.mvc.model.page.JsonResult();
-        /* 577 */
         String coinCode = request.getParameter("coinCode");
-        /* 578 */
         String address = request.getParameter("address");
-        /* 579 */
         if ((StringUtils.isNotEmpty(coinCode)) && (StringUtils.isNotEmpty(address))) {
-            /* 580 */
             if ((coinCode.equalsIgnoreCase("ETH")) || (EtherServiceImpl.isSmartContractCoin(coinCode))) {
-                /* 581 */
                 if (EtherServiceImpl.isAddress(address)) {
-                    /* 582 */
                     result.setSuccess(Boolean.valueOf(true));
-                    /* 583 */
                     result.setMsg("验证成功");
-                    /*     */
                 } else {
-                    /* 585 */
                     result.setSuccess(Boolean.valueOf(false));
-                    /* 586 */
                     result.setMsg("验证失败");
-                    /*     */
                 }
-                /* 588 */
             } else if (coinCode.equalsIgnoreCase("tv")) {
-                /* 589 */
                 boolean isvalid = TvUtil.walletCheckAddress(address);
-                /* 590 */
                 if (isvalid) {
-                    /* 591 */
                     result.setSuccess(Boolean.valueOf(true));
-                    /* 592 */
                     result.setMsg("验证成功");
-                    /*     */
                 } else {
-                    /* 594 */
                     result.setSuccess(Boolean.valueOf(false));
-                    /* 595 */
                     result.setMsg("验证失败");
-                    /*     */
                 }
-                /*     */
             } else {
-                /* 598 */
                 CoinService coinService = new CoinServiceImpl(coinCode);
-                /* 599 */
                 String validate = coinService.validateAddress(address);
-                /* 600 */
                 validate = validate.replace(" ", "");
-                /* 601 */
                 Map<String, Object> map = StringUtil.str2map(validate);
-                /* 602 */
                 boolean isvalid = Boolean.parseBoolean(map.get("isvalid").toString());
-                /* 603 */
                 if (isvalid) {
-                    /* 604 */
                     result.setSuccess(Boolean.valueOf(true));
-                    /* 605 */
                     result.setMsg("验证成功");
-                    /*     */
                 } else {
-                    /* 607 */
                     result.setSuccess(Boolean.valueOf(false));
-                    /* 608 */
                     result.setMsg("验证失败");
-                    /*     */
                 }
-                /*     */
             }
-            /*     */
         } else {
-            /* 612 */
             String message = "参数不正确，请检查";
-            /* 613 */
             result.setMsg(message);
-            /* 614 */
             result.setSuccess(Boolean.valueOf(false));
-            /*     */
+
         }
-        /* 616 */
+
         if (!result.getSuccess().booleanValue()) {
-            /* 617 */
             String degugger = "\tvalidateaddress方法参数：\tcoinCode=" + coinCode + "    address=" + address;
-            /* 618 */
             LogFactory.info(degugger);
-            /*     */
         }
-        /* 620 */
         return result;
-        /*     */
     }
 
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
     @RequestMapping({"/recaptureGethTx"})
-    /*     */
     @ResponseBody
-    /*     */ public hry.utils.JsonResult recapture(HttpServletRequest req)
-    /*     */ {
-        /* 637 */
+    public hry.utils.JsonResult recapture(HttpServletRequest req) {
         hry.utils.JsonResult result = new hry.utils.JsonResult();
-        /* 638 */
         String hash = req.getParameter("hash");
-        /* 639 */
         if ((StringUtils.isNotEmpty(hash)) && (hash.length() == 66)) {
-            /* 640 */
             EtherServiceImpl.recaptureGethTx(hash);
-            /*     */
         } else {
-            /* 642 */
             result.setMsg("hash不正确");
-            /*     */
         }
-        /* 644 */
         return result;
-        /*     */
     }
 
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
-    /*     */
     @RequestMapping({"/test"})
-    /*     */
     @ResponseBody
-    /*     */ public hry.utils.JsonResult test(HttpServletRequest req)
-    /*     */ {
-        /* 663 */
+    public hry.utils.JsonResult test(HttpServletRequest req) {
+
         hry.utils.JsonResult result = new hry.utils.JsonResult();
-        /*     */
-        /*     */
-        /*     */
-        /*     */
-        /* 668 */
         String type = "USDT";
-        /* 669 */
         CoinService coinService = new CoinServiceImpl(type);
-        /* 670 */
         String account = "*";
-        /* 671 */
         Integer count = Integer.valueOf(20);
-        /* 672 */
         List<Bitcoin.Transaction> list = coinService.listTransactions(account, count);
-        /* 673 */
         System.out.println(list.size());
-        /* 674 */
         return result;
-        /*     */
     }
-    /*     */
 }
-
-
-/* Location:              E:\coin.war!\WEB-INF\classes\hry\coin\coin\controller\CoinController.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */

@@ -15,72 +15,39 @@ import java.math.BigInteger;
 import java.util.List;
 
 @Service("appCoinTransactionService")
-/*    */ public class AppCoinTransactionServiceImpl
-        /*    */ extends BaseServiceImpl<AppCoinTransaction, Long>
-        /*    */ implements AppCoinTransactionService
-        /*    */ {
-    /*    */
+public class AppCoinTransactionServiceImpl
+        extends BaseServiceImpl<AppCoinTransaction, Long>
+        implements AppCoinTransactionService {
+
     @Resource(name = "appCoinTransactionDao")
-    /*    */ public void setDao(BaseDao<AppCoinTransaction, Long> dao)
-    /*    */ {
-        /* 33 */
+    @Override
+    public void setDao(BaseDao<AppCoinTransaction, Long> dao) {
         this.dao = dao;
-        /*    */
     }
 
-    /*    */
-    /*    */
-    /*    */
-    public List<AppCoinTransaction> consumeTx()
-    /*    */ {
-        /* 39 */
+    @Override
+    public List<AppCoinTransaction> consumeTx() {
         return ((AppCoinTransactionDao) this.dao).consumeTx();
-        /*    */
     }
 
-    /*    */
-    /*    */
-    /*    */
-    public int existNumber(String hash)
-    /*    */ {
-        /* 45 */
+    @Override
+    public int existNumber(String hash) {
         return ((AppCoinTransactionDao) this.dao).existNumber(hash);
-        /*    */
     }
 
-    /*    */
-    /*    */
-    public BigInteger getLastestBlock()
-    /*    */ {
-        /* 50 */
+    @Override
+    public BigInteger getLastestBlock() {
         return ((AppCoinTransactionDao) this.dao).getLastestBlock();
-        /*    */
     }
 
-    /*    */
-    /*    */
-    /*    */
-    public BigInteger getLastestBlockByCoinCode(String coinCode)
-    /*    */ {
-        /* 56 */
+    @Override
+    public BigInteger getLastestBlockByCoinCode(String coinCode) {
         return ((AppCoinTransactionDao) this.dao).getLastestBlockByCoinCode(coinCode);
-        /*    */
     }
 
-    /*    */
-    /*    */
-    /*    */
-    public List<AppCoinTransaction> listYesterdayRechargeRecord(String coinType)
-    /*    */ {
-        /* 62 */
+    @Override
+    public List<AppCoinTransaction> listYesterdayRechargeRecord(String coinType) {
         return ((AppCoinTransactionDao) this.dao).listYesterdayRechargeRecord(coinType);
-        /*    */
     }
-    /*    */
+
 }
-
-
-/* Location:              E:\coin.war!\WEB-INF\classes\hry\coin\coin\service\impl\AppCoinTransactionServiceImpl.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */
