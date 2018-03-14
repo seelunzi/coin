@@ -126,7 +126,7 @@ public class EtherServiceImpl {
     }
 
     /***
-     * 得到以太坊gas手续费的price
+     * 得到以太坊gas手续费
      * */
     public static BigInteger getGasPrice() {
         BigInteger gasPrice = BigInteger.ZERO;
@@ -144,7 +144,6 @@ public class EtherServiceImpl {
 
     public static BigInteger getGasLimit(Transaction t) {
         BigInteger gasLimit = BigInteger.ZERO;
-
         try {
             gasLimit = ((EthEstimateGas) admin.ethEstimateGas(t).send()).getAmountUsed();
         } catch (NoRouteToHostException var3) {
@@ -152,7 +151,6 @@ public class EtherServiceImpl {
         } catch (IOException var4) {
             var4.printStackTrace();
         }
-
         return gasLimit;
     }
 
@@ -323,10 +321,8 @@ public class EtherServiceImpl {
                 exDmTransactionService.save(exDmTransaction);
                 txs = exDmTransactionService.getExDmTransactionByOrderNo(exDmTransaction.getOrderNo());
                 exDmTransactionService.rechargeCoin(txs);
-                txs = null;
             }
         }
-
     }
 
     public static void send2coinBaseJob() {
@@ -357,7 +353,6 @@ public class EtherServiceImpl {
             var13.printStackTrace();
             LogFactory.info("程序错误");
         }
-
     }
 
     public static JsonResult send2ColdWallet(String toAddress, String amount) {
@@ -373,7 +368,6 @@ public class EtherServiceImpl {
             result.setSuccess(false);
             result.setMsg("以太坊钱包接口ERROR");
         }
-
         return result;
     }
 
@@ -398,7 +392,6 @@ public class EtherServiceImpl {
         Map<String, String> map = new HashMap();
         map.put("to", contractAddress);
         map.put("data", data);
-
         try {
             String methodName = "eth_call";
             Object[] params = new Object[]{map, "latest"};
@@ -410,7 +403,6 @@ public class EtherServiceImpl {
             var9.printStackTrace();
             LogFactory.info("查询接口ERROR");
         }
-
         return balance;
     }
 
@@ -423,7 +415,6 @@ public class EtherServiceImpl {
             map.put("from", fromAddress);
             map.put("to", contractAddress);
             map.put("data", data);
-
             try {
                 String methodName = "eth_sendTransaction";
                 Object[] params = new Object[]{map};
@@ -569,14 +560,12 @@ public class EtherServiceImpl {
             String toMoney = money.toString();
             List<String> listAccounts = listAccount();
             BigInteger totalMoney = BigInteger.ZERO;
-
             String total;
             BigInteger accoutMoney;
             for (Iterator var10 = listAccounts.iterator(); var10.hasNext(); totalMoney = totalMoney.add(accoutMoney)) {
                 total = (String) var10.next();
                 accoutMoney = getBalanceofContract(total, contractAddress);
             }
-
             BigDecimal totalMoney_ = hry.utils.Convert.fromWei(String.valueOf(totalMoney), hry.utils.Convert.Unit.fromString(unit));
             total = totalMoney_.toString();
             String coldAddress = (String) Properties.appcoinMap().get("ETH".toLowerCase() + "_coldAddress");
@@ -586,7 +575,6 @@ public class EtherServiceImpl {
             wallet.setWithdrawalsAddressMoney(toMoney);
             wallet.setTotalMoney(total);
         }
-
         return wallet;
     }
 
@@ -608,7 +596,6 @@ public class EtherServiceImpl {
 
     public static Block GetBlockByNumbe(BigInteger number, boolean isdetail) {
         DefaultBlockParameter blockNumber = DefaultBlockParameter.valueOf(number);
-
         try {
             return ((EthBlock) admin.ethGetBlockByNumber(blockNumber, isdetail).send()).getBlock();
         } catch (IOException var4) {
@@ -621,14 +608,12 @@ public class EtherServiceImpl {
         BigInteger blockNumber = getBlockNumber().subtract(BigInteger.valueOf(15L));
         System.out.println(blockNumber);
         BigInteger count = BigInteger.valueOf(15L);
-
         for (int i = 1; i < count.intValue(); ++i) {
             blockNumber = blockNumber.add(BigInteger.ONE);
             Block block = GetBlockByNumbe(blockNumber, true);
             if (block != null) {
                 List<TransactionResult> transactions = block.getTransactions();
                 Iterator var5 = transactions.iterator();
-
                 while (var5.hasNext()) {
                     TransactionResult l = (TransactionResult) var5.next();
                     org.web3j.protocol.core.methods.response.Transaction tx = (org.web3j.protocol.core.methods.response.Transaction) l;
