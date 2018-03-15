@@ -1,7 +1,6 @@
-/*    */
+
 package hry.coin.transaction.service.impl;
-/*    */
-/*    */
+
 
 import hry.coin.transaction.dao.AppCoinTransactionTvDao;
 import hry.coin.transaction.model.AppCoinTransactionTv;
@@ -13,65 +12,23 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
 @Service("appCoinTransactionTvService")
-/*    */ public class AppCoinTransactionTvServiceImpl
-        /*    */ extends BaseServiceImpl<AppCoinTransactionTv, Long>
-        /*    */ implements AppCoinTransactionTvService
-        /*    */ {
-    /*    */
+public class AppCoinTransactionTvServiceImpl
+        extends BaseServiceImpl<AppCoinTransactionTv, Long>
+        implements AppCoinTransactionTvService {
     @Resource(name = "appCoinTransactionTvDao")
-    /*    */ public void setDao(BaseDao<AppCoinTransactionTv, Long> dao)
-    /*    */ {
-        /* 31 */
+    @Override
+    public void setDao(BaseDao<AppCoinTransactionTv, Long> dao) {
         this.dao = dao;
-        /*    */
     }
 
-    /*    */
-    /*    */
-    /*    */
-    public boolean notload(String trxid)
-    /*    */ {
-        /* 37 */
+    @Override
+    public boolean notload(String trxid) {
         return ((AppCoinTransactionTvDao) this.dao).getcountBytrxid(trxid) == 0;
-        /*    */
     }
 
-    /*    */
-    /*    */
-    /*    */
-    public List<String> listYesterdayRechargeRecord(String type)
-    /*    */ {
-        /* 43 */
+    @Override
+    public List<String> listYesterdayRechargeRecord(String type) {
         return ((AppCoinTransactionTvDao) this.dao).listYesterdayRechargeRecord(type);
-        /*    */
     }
-    /*    */
 }
-
-
-/* Location:              E:\coin.war!\WEB-INF\classes\hry\coin\transaction\service\impl\AppCoinTransactionTvServiceImpl.class
- * Java compiler version: 8 (52.0)
- * JD-Core Version:       0.7.1
- */

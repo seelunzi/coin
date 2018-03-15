@@ -480,7 +480,6 @@ public class EtherServiceImpl {
             wallet.setWithdrawalsAddressMoney(toMoney);
             wallet.setTotalMoney(total);
         }
-
         return wallet;
     }
 
