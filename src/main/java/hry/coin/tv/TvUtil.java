@@ -131,8 +131,7 @@ public class TvUtil {
         return addr;
     }
 
-    public static Long getBlockCount()
-        /*     */ {
+    public static Long getBlockCount() {
         long blockCount = 0L;
         try {
             List<Object> sendParams = new ArrayList();
