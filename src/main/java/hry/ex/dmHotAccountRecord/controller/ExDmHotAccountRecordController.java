@@ -1,7 +1,5 @@
-/*    */
+
 package hry.ex.dmHotAccountRecord.controller;
-/*    */
-/*    */
 
 import hry.core.annotation.MyRequiresPermissions;
 import hry.core.annotation.base.MethodName;
@@ -19,65 +17,23 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
-/*    */
 @Controller
-/*    */
 @RequestMapping({"/dmHotAccountRecord/exdmhotaccountrecord"})
-/*    */ public class ExDmHotAccountRecordController
-        /*    */ extends BaseController<ExDmHotAccountRecord, Long>
-        /*    */ {
-    /*    */
+public class ExDmHotAccountRecordController
+        extends BaseController<ExDmHotAccountRecord, Long> {
     @Resource(name = "exDmHotAccountRecordService")
-    /*    */ public void setService(BaseService<ExDmHotAccountRecord, Long> service)
-    /*    */ {
-        /* 39 */
+    @Override
+    public void setService(BaseService<ExDmHotAccountRecord, Long> service) {
         this.service = service;
-        /*    */
     }
 
-    /*    */
-    /*    */
     @MethodName(name = "查看ExDmHotAccountRecord")
-    /*    */
     @RequestMapping({"/see/{id}"})
-    /*    */
     @MyRequiresPermissions
-    /*    */
     @ResponseBody
-    /*    */ public ExDmHotAccountRecord see(@PathVariable Long id) {
-        /* 47 */
+    public ExDmHotAccountRecord see(@PathVariable Long id) {
         ExDmHotAccountRecord exDmHotAccountRecord = (ExDmHotAccountRecord) this.service.get(id);
-        /* 48 */
         return exDmHotAccountRecord;
-        /*    */
     }
 
     @MethodName(name = "增加ExDmHotAccountRecord")
